@@ -1,9 +1,7 @@
 package com.audio;
 
 import java.io.*; 
-
 import javax.sound.sampled.*; 
-
 import java.net.*;
 
 /**
@@ -24,6 +22,8 @@ public class audio {
     Socket clientSocket;
  
 	static boolean stopCapture = false; // 控制录音标志
+	static boolean stopPlay=false;         //播放控制标志
+	
 	public static AudioFormat audioFormat; // 录音格式
 	
 	// 读取数据：从TargetDataLine写入ByteArrayOutputStream录音
@@ -64,6 +64,11 @@ public class audio {
 					targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
 					targetDataLine.open(audioFormat);
 					targetDataLine.start();
+			
+					
+					Thread Record=new Thread(new RecordThread(s));
+					//RecordThread Record=new RecordThread(s;)
+					Record.start();
 		}
 		catch (Exception e) {
 			    e.printStackTrace();
@@ -72,8 +77,75 @@ public class audio {
 		
 	}
 	
-    public void ReceiveStream(){
+/**
+ * 从网络流中获取数据并播放
+ * @param s 与对方机器的套接字
+ */
+    public void ReceiveStream(Socket s){
+    	
+    	try{
+    		audioFormat = getAudioFormat();
+    		
+    		//获得播放器资源
+    		DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
+			sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+			sourceDataLine.open(audioFormat);
+			sourceDataLine.start();
+			
+			PlayThread Play=new PlayThread(s);
+		   Play.start();
+			
+			
+    		
+    	}catch(Exception e)
+    	{
+    		  e.printStackTrace();
+		    	System.exit(0);
+    	}
     	
     }
-	
+
+/**
+ * 停止
+ */
+   public void StopRecord(){
+	   
+	   stopCapture=true;
+   }
+    
+    
+ /**
+  * 停止播放  
+  */
+   public void StopPlay(){
+	   stopPlay=true;
+   }
+   
+  /**
+   *  保存文件
+   * @param path 文件路径
+   */
+   public void Save(String path){
+	// 取得录音输入流
+			AudioFormat audioFormat = getAudioFormat();
+			byte audioData[] = byteArrayOutputStream.toByteArray();
+			InputStream byteArrayInputStream = new ByteArrayInputStream(audioData);
+			audioInputStream = new AudioInputStream(byteArrayInputStream,audioFormat, audioData.length / audioFormat.getFrameSize());
+	   
+			try {
+				File file = new File(path);
+				AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	   
+   }
+   
+ /**
+  *   
+  */
+   public void PlayBuff(){
+	   
+   }
+   
 }

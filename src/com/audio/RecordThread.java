@@ -9,11 +9,11 @@ import java.net.*;
   class RecordThread extends Thread  {
 	
 	// 临时数组
-		byte tempBuffer[] = new byte[10000];
+		byte tempBuffer[] = new byte[1000];
 		Socket client;
 		BufferedOutputStream captrueOutputStream;
 		
-	public 	RecordThread(Socket s){
+		RecordThread(Socket s){
 			this.client=s;
 		}
 		
@@ -37,23 +37,30 @@ import java.net.*;
 					//把数据写入网络流中
 					try { 
 			               captrueOutputStream.write(tempBuffer, 0, cnt);//写入网络流 
+			               
+			              // System.out.println("write data in socket");
+			             //把数据写入缓冲区中
+							if (cnt > 0) {
+								// 保存该数据
+								audio.byteArrayOutputStream.write(tempBuffer, 0, cnt);
+								audio.totaldatasize += cnt;
+								
+								//System.out.println("write data in buffer");
+							}
 			             } 
 			             catch (Exception ex) { 
 			                 break; 
 			             } 
 					
-					//把数据写入缓冲区中
-					if (cnt > 0) {
-						// 保存该数据
-						audio.byteArrayOutputStream.write(tempBuffer, 0, cnt);
-						audio.totaldatasize += cnt;
-					}
+					
 				}
 				audio.byteArrayOutputStream.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.exit(0);
 			}
+			audio.targetDataLine.stop();
+			audio.targetDataLine.close();
 		}
 
 }
