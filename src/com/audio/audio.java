@@ -35,6 +35,9 @@ public class audio {
 	static AudioInputStream audioInputStream;
 	static SourceDataLine sourceDataLine;
 	
+	Thread Record;
+	PlayThread Play;
+	
 	
 	// 取得AudioFormat 音频格式
 	private AudioFormat getAudioFormat() {
@@ -66,7 +69,7 @@ public class audio {
 					targetDataLine.start();
 			
 					
-					Thread Record=new Thread(new RecordThread(s));
+					 Record=new Thread(new RecordThread(s));
 					//RecordThread Record=new RecordThread(s;)
 					Record.start();
 		}
@@ -92,7 +95,7 @@ public class audio {
 			sourceDataLine.open(audioFormat);
 			sourceDataLine.start();
 			
-			PlayThread Play=new PlayThread(s);
+		   Play=new PlayThread(s);
 		   Play.start();
 			
 			
@@ -105,20 +108,68 @@ public class audio {
     	
     }
 
-/**
- * 停止
- */
-   public void StopRecord(){
-	   
+   public void StopRecord()
+   {
 	   stopCapture=true;
+   }
+   public void StopPlay(){
+	   stopPlay=true;
+   }
+    
+/**
+ * 暂停录音
+ */
+   public void PauseRecord(){
+	   
+	   try{
+		     if(Record.isAlive()){
+		    	 Record.wait();
+		     }
+		    	 
+	   }catch(Exception e){
+		   System.out.println("error in PauseRecord"); 
+	   }
    }
     
     
  /**
-  * 停止播放  
+  * 暂停播放  
   */
-   public void StopPlay(){
-	   stopPlay=true;
+   public void PausePlay(){
+	   try{
+		     if(Play.isAlive()){
+		    	 Play.wait();
+		     }
+		    	 
+	   }catch(Exception e){
+		   System.out.println("error in PausePlay"); 
+	   }  
+   }
+   
+   /*
+    * 再次播放
+    */
+   public void AgainPlay(){
+	   try{
+		    
+		    Play.notify();	 
+	   }catch(Exception e){
+		   System.out.println("error in AgainPlay"); 
+	   }  
+   }
+   
+   /*
+    * 再次录音
+    */
+   public void AgainRecord()
+   {
+	   try{
+		    
+		    Record.notify();	 
+	   }catch(Exception e){
+		   System.out.println("error in AgainRecord"); 
+	   }  
+	   
    }
    
   /**
@@ -145,6 +196,7 @@ public class audio {
   *   
   */
    public void PlayBuff(){
+	   
 	   
    }
    
