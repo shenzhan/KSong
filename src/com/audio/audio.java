@@ -146,7 +146,7 @@ public class audio {
 	   }  
    }
    
-   /*
+   /**
     * 再次播放
     */
    public void AgainPlay(){
@@ -158,7 +158,7 @@ public class audio {
 	   }  
    }
    
-   /*
+   /**
     * 再次录音
     */
    public void AgainRecord()
@@ -189,15 +189,13 @@ public class audio {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	   
    }
    
  /**
   *   
   */
    public void PlayBuff(){
-	   
-	   
+	 
    }
    
 }
