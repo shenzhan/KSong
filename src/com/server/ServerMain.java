@@ -11,9 +11,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.Remote;
 
+/**
+ * 服务器主函数 主要是绑定对象
+ * @author shenzhan
+ *
+ */
 public class ServerMain {
 
-	/**
+	/**服务器主函数
 	 * @param args
 	 * @throws RemoteException 
 	 */
@@ -38,7 +43,7 @@ public class ServerMain {
 			e.printStackTrace();
 		}
 		
-		/*
+	  /*
 		  Server ser=new Server();
 		
 		//System.out.println("ok");
@@ -50,14 +55,21 @@ public class ServerMain {
 				 System.out.println("fail");
 			 }
 		
-			 
+		
 			System.out.println(ser.GetIP(2));
+			
 			ArrayList<SongStru> SongList;
 			SongList=ser.GetSongList();
 			for(int i=0;i<SongList.size();++i){
 				System.out.println(SongList.get(i).sName);
 			}
-		*/
+         ArrayList<FriendStru> FriendList;
+         FriendList=ser.GetFriendList(1);
+         for(int i=0;i<FriendList.size();++i){
+				System.out.println(FriendList.get(i).uIdFriend);
+			}
+      */   
+		
 	}
 
 }

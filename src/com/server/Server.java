@@ -14,7 +14,7 @@ import com.mysql.jdbc.Statement;
 /**
  * 服务器端提供服务类
  */
-public class Server  extends UnicastRemoteObject implements IServer{
+public class Server extends UnicastRemoteObject implements IServer {
 
 	/**
 	 * 
@@ -139,11 +139,68 @@ public class Server  extends UnicastRemoteObject implements IServer{
 				song.sTime = res.getDate("sTime");
 				SongList.add(song);
 			}
+			return SongList;
 		} catch (Exception e) {
-
+             e.printStackTrace();
+             return null;
 		}
-		return SongList;
+	}
 
+	@Override
+	/**  返回好友列表
+	 * @param nId  用户的ID
+	 * @return FriendStru[] 好友数据
+	 */
+	public ArrayList<FriendStru> GetFriendList(int nId) {
+		try {
+			String sql = String.format("select * from friend where uIdMe=%d", nId); // 查找所有的好友
+			Statement statement = (Statement) conn.createStatement();
+			ResultSet res = (ResultSet) statement.executeQuery(sql); // 执行数据
+
+			ArrayList<FriendStru> FriendList = new ArrayList<FriendStru>(); // 创建返回数组
+			while (res.next()) {
+				// 在要返回的集合中填充数据
+				FriendStru friend = new FriendStru();
+				friend.fId = res.getInt("fId");
+				friend.uIdMe = res.getInt("uIdMe");
+				friend.uIdFriend = res.getInt("uIdFriend");
+				FriendList.add(friend);
+			}
+			return FriendList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	//*******Logic ERROR  Need to change********************************************************************************
+
+	@Override
+	/**
+	 * 返回K群列表
+	 * @param nId  用户的ID
+	 * @return KGroupStru[] K群数据
+	 */
+	public ArrayList<KGroupStru> GetKGroupList(int nId) {
+		try {
+			String sql = String
+					.format("select * from kgroup where nId=%d", nId); // 查找所有的K群
+			Statement statement = (Statement) conn.createStatement();
+			ResultSet res = (ResultSet) statement.executeQuery(sql); // 执行数据
+			ArrayList<KGroupStru> KGroupList = new ArrayList<KGroupStru>(); // 创建返回数组
+			while (res.next()) {
+				// 在要返回的集合中填充数据
+				KGroupStru kgroup = new KGroupStru();
+				kgroup.kId = res.getInt("kId");
+				kgroup.kName = res.getString("kName");
+				kgroup.kTime = res.getDate("kTime");
+				KGroupList.add(kgroup);
+			}
+			return KGroupList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

@@ -42,5 +42,20 @@ public interface IServer  extends Remote {
 	 * @return SongStru[] 歌曲数据
 	 */
 	public ArrayList<SongStru> GetSongList() throws RemoteException;
+	
+	
+	 /**  返回好友列表
+		 * @param nId  用户的ID
+		 * @return FriendStru[] 好友数据
+		 */
+	   public ArrayList<FriendStru> 	GetFriendList(int nId) throws RemoteException;
+	   
+	   
+	   /**
+		 * 返回K群列表
+		 * @param nId  用户的ID
+		 * @return KGroupStru[] K群数据
+		 */
+		public ArrayList<KGroupStru> 	GetKGroupList(int nId) throws RemoteException;
 
 }

@@ -8,6 +8,7 @@ import java.rmi.RMISecurityManager;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.Remote;
+import java.util.ArrayList;
 
 public class Client {
 
@@ -29,6 +30,11 @@ public class Client {
 			 }
 			 
 			 System.out.println(server.GetIP(2));
+			 ArrayList<FriendStru> FriendList;
+			 FriendList=server.GetFriendList(1);
+			 for(int i=0;i<FriendList.size();++i)
+				 System.out.println(FriendList.get(i).uIdFriend);
+			 
 			 
 		 }catch(Exception e){
 			 e.printStackTrace();
